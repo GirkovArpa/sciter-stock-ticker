@@ -1,4 +1,4 @@
-# Sciter Tocks Ticker
+# Sciter Stocks Ticker
 
 A clone of [this](https://github.com/eoaranda/stocks-ticker) Electron application.  
 
