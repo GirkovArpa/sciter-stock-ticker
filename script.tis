@@ -1,0 +1,3 @@
+const DEBUGGING = false;
+DEBUGGING && view.connectToInspector && view.connectToInspector(rootElement, inspectorIpAddress);
+

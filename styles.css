@@ -1,0 +1,81 @@
+@font-face {
+  font-family: 'FontAwesome';
+  font-style: normal;
+  font-weight: 400;
+  src: url('fontawesome-webfont.ttf');
+}
+
+@font-face {
+  font-family: "SubwayTicker";
+  src: url("SubwayTicker-q1Z5.ttf");
+}
+
+body {
+  background: #3F3F3F;
+  margin: 0;
+  padding: 5dip;
+  font-family: "SubwayTicker", Fallback, sans-serif;
+}
+
+a:hover {
+  font-size: 20dip;
+  font-family: FontAwesome;
+  color: gold;
+}
+
+.header {
+  padding: 4dip;
+  text-align: center;
+  font-size: 20dip;
+  font-family: FontAwesome;
+  color: dodgerblue;
+}
+
+.header::after {
+  text-align: right;
+  content: "\f186";
+}
+
+.chevron-down::before {
+  font-family: FontAwesome;
+  content: "\f107\00A0";
+  font-size: 24dip;
+}
+
+.chevron-up::before {
+  font-family: FontAwesome;
+  content: "\f106\00A0";
+  font-size: 24dip;
+}
+
+.percent, .difference {
+  font-size: 16dip;
+}
+
+.marquee {
+  width: max-intrinsic;
+  height: max-content;
+  overflow: hidden;
+  flow: vertical;
+  -marquee: vertical;
+  -marquee-direction: forward;
+  -marquee-style: scroll;
+  size: *;
+  behavior: marquee;
+}
+
+.card {
+  background: #414A50;
+  border-radius: 5dip;
+  line-height: 24dip;
+}
+
+.arrow-down {
+  font-size: 24dip;
+}
+
+.stock-name {
+  font-size: 24dip;
+}
+
+.footer {}

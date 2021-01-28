@@ -1,0 +1,118 @@
+const file = Stream.openFile(".env", "r");
+const API_TOKEN = file.readln().replace('API_TOKEN="', "").replace('"', '');
+const STOCKS = file.readln().replace('STOCKS="', "").replace('"', '').split(",").sort();
+file.close();
+
+//stdout.println("API_TOKEN", API_TOKEN);
+//stdout.println("STOCKS:");
+//for (var stock in STOCKS) stdout.println(stock);
+
+const socket = Net.WebSocket.connect("ws://ws.finnhub.io?token=" + API_TOKEN);
+socket.on("connect", function() {
+  //stdout.println("WebSocket connected!");
+  for (var stock in STOCKS) {
+    socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': stock }))
+  }
+});
+//socket.on("text", |data| stdout.println("text:", text));
+//socket.on("binary", |data| stdout.println("binary:", data));
+//socket.on("error", |errmsg| stdout.println("error:", errmsg));
+//socket.on("close", || stdout.println("close!"));
+
+
+async function getSymbolQuoteData(symbol) {
+  const [response] = await view.request { 
+    url: String.$(https://finnhub.io/api/v1/quote?symbol={symbol}&token={API_TOKEN}), 
+    type: #get,
+    output: #json,
+    noCache: true
+  };
+  return response;
+} 
+
+function Float.toFixed(frac = 0) {
+  return String.printf("%.*f", frac, this);
+}
+
+function calculateStockPercent(currentPrice, openPrice) {
+  const percent = ((currentPrice - openPrice) / openPrice) * 100;
+  const alert = Math.abs(percent) >= 2 ? true : false;
+  const arrow = percent > 0 ? "fa-angle-up" : "fa-angle-down";
+  var style = percent > 0 ? "stock-up" : "stock-down";
+  style += (alert) ? " alert-blink" : "";
+  const blink = (alert) ? ".alert-blink" : "";
+  return { percentValue: percent, percentText: percent.toFixed(2) + "%", arrow: arrow, style: style, blink: blink };
+}
+
+function cleanSymbol(symbol) {
+  const cleanSymbol = symbol.replace("BINANCE:", "");
+  return cleanSymbol;
+}
+
+function buildQuoteData(symbol, currentPrice, openPrice) {
+  const stockPercentData = calculateStockPercent(currentPrice, openPrice);
+  const stocksObject = {
+    name: cleanSymbol(symbol),
+    openPrice: openPrice,
+    price: currentPrice.toFixed(2),
+    difference: (currentPrice - openPrice).toFixed(2),
+    percent: stockPercentData.percentText,
+    arrow: stockPercentData.arrow,
+    style: stockPercentData.style,
+    blink: stockPercentData.blink,
+  };
+  return stocksObject;
+}
+
+async function loadData() {
+  for (var stock in STOCKS) {
+    const output = await getSymbolQuoteData(stock);
+    const result = buildQuoteData(stock, output.c, output.o);
+    //stdout.println("result:", JSON.stringify(result));
+    const HTML = fillTemplate(result);
+    
+    const card = $(#{result.name});
+    if (card) {
+      card.html = HTML.split("\n").slice(1, -1).join("\n");
+    } else {
+      $(div.marquee).html += HTML;
+    }
+    //stdout.println(HTML);
+  }
+}
+
+loadData();
+
+self.timer(1800s, function() {
+  loadData();
+  return true;
+});
+
+function fillTemplate(data) {
+  var HTML = String.$(<div #{data.name} .ticker-card .card bg-dark>
+        <div>
+          <div .ticker-card-header>
+            <div .leftColumn>
+              <span .stockName>{data.name}</span>
+            </div>
+            <span .stockPrice>${data.price}</span>
+          </div>
+          <div .ticker-card-footer .stock-{data.arrow.replace("fa-angle-", "")} {data.blink}>
+            <div>
+              <div style="font-size: 24px"></div>
+              <span .percent .chevron-{data.arrow.replace("fa-angle-", "")}>{data.percent}</span>&nbsp;
+              <span .difference>({data.difference})</span>
+            </div>
+          </div>
+        </div>
+      </div>);
+      return HTML;
+}
+
+self.on("click", "a[href^=http]", function(evt) {
+   view.msgbox(
+    #information,
+    "This application uses Sciter Engine (https://sciter.com), © Terra Informatica Software, Inc."
+  );
+  return true;
+});

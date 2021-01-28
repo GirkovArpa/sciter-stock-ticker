@@ -1,0 +1,78 @@
+#market-status {
+  text-align: right;
+  padding: 4dip;
+}
+
+#market-status-day {
+  color: gold;
+}
+
+#market-status-night {
+  color: dodgerblue;
+}
+
+.card {
+  margin-bottom: 4dip;
+  padding: 16dip;
+}
+
+.ticker-card-header {
+  height: 40dip;
+  margin-bottom: 0dip;
+  font-weight: bolder;
+}
+
+.leftColumn {
+  float: left;
+  width: 50%;
+}
+
+.stockName {
+  font-size: 24dip;
+  font-weight: 700dip;
+  color: white;
+}
+
+.stockPrice {
+  vertical-align: top;
+  font-size: 16dip;
+  font-weight: 700dip;
+  color: white;
+}
+
+.stock-up {
+  color: #1db753;
+}
+
+.difference {
+  padding-left: 8dip;
+}
+
+.stock-down {
+  color: #f45b5b;
+}
+
+.ticker-card-footer {
+  height: 20dip;
+}
+
+.alert-blink {
+  color: #ffc108;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+#marquee:hover {
+  cursor: pointer;
+}
